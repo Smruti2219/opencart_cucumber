@@ -1,0 +1,47 @@
+import java.time.Duration;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class HandlingDynamicDropdowns {
+
+	public static <WebDriver> void main(String[] args) throws InterruptedException {
+		
+	
+		ChromeDriver driver = new ChromeDriver();
+		
+		driver.manage().window().maximize();
+		driver.get("https://rahulshettyacademy.com/dropdownsPractise/");
+		
+		//Automate From(BLR) and To(MAA) dropdown and select city  
+		
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//span[@id='ctl00_mainContent_ddl_originStation1_CTXTaction']")).click();
+		driver.findElement(By.id("ctl00_mainContent_ddl_originStation1_CTXT")).sendKeys("BLR");
+		
+		
+		driver.findElement(By.xpath("//input[contains(@id,'destinationStation1_CTXT')]")).sendKeys("MAA");
+		driver.findElement(By.xpath("//a[@value='MAA']")).click();
+		
+		//Automate Country Search field – search for Ind 
+		driver.findElement(By.xpath("//input[@class='inputs ui-autocomplete-input']")).sendKeys("Ind");
+		
+		//Get all the suggested items
+		Thread.sleep(5000);
+		Select ctrydropdown=new Select(driver.findElement(By.xpath("//div[@id='header']//script[3]")));
+		System.out.println("Printing");
+		
+		
+		}
+
+	}
+
+}

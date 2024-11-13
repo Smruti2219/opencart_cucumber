@@ -1,0 +1,14 @@
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class AssigmentGetAllText {
+
+	public static void main(String[] args) {
+		// Give me the count of links on the page.
+		WebDriver driver = new ChromeDriver();
+		driver.get("https://rahulshettyacademy.com/AutomationPractice/");
+		driver.manage().window().maximize();
+
+	}
+
+}

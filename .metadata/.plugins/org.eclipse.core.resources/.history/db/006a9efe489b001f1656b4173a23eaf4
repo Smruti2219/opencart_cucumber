@@ -1,0 +1,87 @@
+package SeleniumFrameworkDesign.SeleniumFrameworkDesign;
+
+import java.time.Duration;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.locators.RelativeLocator;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
+
+import rahulshettyacademy.pageObjects.LandingPage;
+
+public class StandaloneTest {
+
+	public static void main(String[] args) throws InterruptedException {
+		WebDriver driver= new ChromeDriver();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		driver.get("https://rahulshettyacademy.com/client/");
+		driver.manage().window().maximize();
+		
+		String productName= "ZARA COAT 3";
+		LandingPage landingpage= new LandingPage(driver);
+		landingpage.LandingPageAction("pikunew2219@gmail.com", "Smruti@2219");
+		
+		
+		List<WebElement> products= driver.findElements(By.cssSelector(".mb-3"));
+		System.out.println(products.size());
+		
+		//Select product without using loop and using java stream method to iterate.
+		WebElement prod1 = products.stream().filter(product->
+		product.findElement(By.cssSelector("b")).getText().equals(productName)).findFirst().orElse(null);
+		prod1.findElement(By.cssSelector(".card-body button:last-of-type")).click();
+		
+		WebDriverWait wait= new WebDriverWait(driver,Duration.ofSeconds(5));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#toast-container")));
+		
+		//It will reduce the screen time of invisibility of blurr thing.
+		wait.until(ExpectedConditions.invisibilityOf(driver.findElement(By.cssSelector(".ng-animating"))));
+		
+		WebElement prod2 = products.stream().filter(product->
+		product.findElement(By.cssSelector("b")).getText().equals("IPHONE 13 PRO")).findFirst().orElse(null);
+		prod2.findElement(By.cssSelector(".card-body button:last-of-type")).click();
+		
+		Thread.sleep(3000);
+		driver.findElement(By.xpath("//button[@routerlink='/dashboard/cart']")).click();
+		
+		List<WebElement> cartProducts= driver.findElements(By.cssSelector(".cartSection h3"));
+		Boolean match= cartProducts.stream().anyMatch(cartProduct-> cartProduct.getText().equalsIgnoreCase(productName));
+		Assert.assertTrue(match);
+		
+		JavascriptExecutor jse = (JavascriptExecutor)driver;
+		WebElement element = driver.findElement(By.cssSelector(".totalRow button"));
+        // Use JavaScript to click the element
+        jse.executeScript("arguments[0].click();", element);
+		
+        Thread.sleep(1000);
+        Actions a= new Actions(driver);
+        a.sendKeys(driver.findElement(By.cssSelector("[placeholder='Select Country']")), "india").perform();
+        
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".ta-results")));
+        
+        WebElement dropdownelement = driver.findElement(By.xpath("//div/section/button[2]"));
+        jse.executeScript("arguments[0].click();", dropdownelement);
+		
+        
+        WebElement orderPlace= driver.findElement(By.cssSelector(".action__submit"));
+        jse.executeScript("arguments[0].click();", orderPlace);
+		
+		String confirmation= driver.findElement(By.className("hero-primary")).getText();
+		Assert.assertTrue(confirmation.equalsIgnoreCase("Thankyou for the order."));
+		
+		driver.quit();
+		Thread.sleep(2000);
+		By selectedProduct= RelativeLocator.with(By.xpath("//button[@class= 'btn w-40 rounded']")).below(By.xpath("//h5//b[contains(text(), 'ZARA COAT 3')]"));
+		driver.findElement(selectedProduct).click();
+		
+		
+	}
+
+}

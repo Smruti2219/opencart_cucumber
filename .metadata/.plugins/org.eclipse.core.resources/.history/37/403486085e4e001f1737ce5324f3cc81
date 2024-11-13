@@ -1,0 +1,18 @@
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Task_4_Automation_Training {
+	public static void main(String[] args) {
+		WebDriver driver= new ChromeDriver();
+		driver.get("https://rahulshettyacademy.com/dropdownsPractise/");
+		driver.manage().window().maximize();
+		
+		//1)select on Multicity 
+		driver.findElement(By.xpath("//input[@value='TripPlanner']")).click();
+		driver.findElement(By.xpath("//a[@id='MultiCityModelAlert']")).click();
+		
+	}
+
+}

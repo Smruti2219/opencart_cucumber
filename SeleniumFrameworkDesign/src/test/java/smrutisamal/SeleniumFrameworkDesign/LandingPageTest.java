@@ -1,0 +1,92 @@
+package smrutisamal.SeleniumFrameworkDesign;
+
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+import org.testng.AssertJUnit;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.locators.RelativeLocator;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import smrutisamal.AbsractClass.AbstractComponent;
+import smrutisamal.pageObjects.CartPage;
+import smrutisamal.pageObjects.LandingPage;
+import smrutisamal.pageObjects.OrderPage;
+import smrutisamal.pageObjects.ProductCatalogue;
+import smrutisamal.testComponent.BaseTest;
+
+public class LandingPageTest extends BaseTest {
+	String productName= "ZARA COAT 3";
+	@Test(dataProvider = "getData", groups = "Smoke", priority = 2)
+	public void submitOrder(HashMap<String,String> input) throws IOException, InterruptedException {
+		
+		
+		String productName2= "IPHONE 13 PRO";
+		
+		LandingPage landingPage = setup();
+		
+		
+		ProductCatalogue productCatalogue = landingPage.LandingPageAction(input.get("email"), input.get("password"));
+		List<WebElement>products= productCatalogue.getProductList();
+		
+		productCatalogue.addFirstProductToCart(input.get("product"));
+		
+		Thread.sleep(2000);
+		productCatalogue.addSecondProductToCart(productName2);
+		
+		
+		productCatalogue.goToCartPage();
+		
+		CartPage cart= new CartPage(driver);
+		Boolean match= cart.checkProductByName(productName2);
+		Assert.assertTrue(match);
+		
+		cart.clicktheCheckOutButton();
+		cart.selectCountry("india");
+		cart.dropDownElement();
+		cart.checkOrderPlace();
+		
+		String textCaptured= cart.finalTextConfirmation();
+		AssertJUnit.assertTrue(textCaptured.equalsIgnoreCase("Thankyou for the order."));
+		
+		
+		
+		/*Thread.sleep(2000);
+		By selectedProduct= RelativeLocator.with(By.xpath("//button[@class= 'btn w-40 rounded']")).below(By.xpath("//h5//b[contains(text(), 'ZARA COAT 3')]"));
+		driver.findElement(selectedProduct).click();*/
+		
+	}
+	//Check Jara Coat product is there in order history
+	@Test(priority = 1, groups= {"Regression"})
+	public void OrderHistoryTest() throws IOException {
+		LandingPage landingPage = setup();
+		ProductCatalogue productCatalogue = landingPage.LandingPageAction("pikunew2219@gmail.com", "Smruti@2219");
+		OrderPage orderPage = productCatalogue.goToMyOrder();
+		orderPage.VerifyOrderDisplay(productName);
+	}
+	@DataProvider
+	public Object[][] getData() {
+		
+		HashMap<String,String> map= new HashMap<String, String>();
+		map.put("email", "pikunew2219@gmail.com");
+		map.put("password", "Smruti@2219");
+		map.put("product", "ZARA COAT 3");
+		
+		return new Object[][] {{map}};
+		
+	}
+
+}

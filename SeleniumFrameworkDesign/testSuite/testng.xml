@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite parallel="tests" name="Suite">
+
+<listeners>
+     <listener class-name="smrutisamal.testComponent.Listners"/>
+</listeners>
+
+    <test thread-count="5" name="Submit Order">
+    <classes>
+      <class name="smrutisamal.SeleniumFrameworkDesign.LandingPageTest"/>
+    </classes>
+  </test>
+  
+   <test thread-count="5" name="Error Validation Test">
+    <classes>
+      <class name="smrutisamal.SeleniumFrameworkDesign.ErrorValidation"/>
+    </classes>
+  </test>
+ 
+ 
+</suite> <!-- Suite -->
