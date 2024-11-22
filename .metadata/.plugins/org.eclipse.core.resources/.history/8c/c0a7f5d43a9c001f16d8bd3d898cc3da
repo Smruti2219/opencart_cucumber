@@ -1,7 +1,0 @@
-package rahulshettyAcademy.testComponent;
-
-import org.testng.ITestListener;
-
-public class Listners implements ITestListener {
-
-}

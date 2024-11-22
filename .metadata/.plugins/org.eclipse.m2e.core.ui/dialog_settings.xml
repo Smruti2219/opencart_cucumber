@@ -25,6 +25,7 @@
 	</section>
 	<section name="Maven2ProjectWizardArchifactPage">
 		<list key="package">
+			<item value="SeleniumFrameworkDesign.ExcelDataDriven"/>
 			<item value="SeleniumFrameworkDesign.SeleniumFrameworkDesign"/>
 			<item value="AutomationTraining.AutomationTraining"/>
 		</list>
@@ -33,6 +34,7 @@
 			<item value="AutomationTraining"/>
 		</list>
 		<list key="artifactId">
+			<item value="ExcelDataDriven"/>
 			<item value="SeleniumFrameworkDesign"/>
 			<item value="AutomationTraining"/>
 		</list>
